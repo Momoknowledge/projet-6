@@ -12,7 +12,8 @@ function getOBJUserLike(userID, isLike) {
 }
 
 function getOBJLike(isLike, add = true) {
-    return isLike ? {likes: add ? 1 : -1} : {dislikes:  add ? 1 : -1};
+    const n = add ? 1 : -1;
+    return isLike ? {likes: n} : {dislikes: n};
 }
 
 async function pushLike(sauceID, userID, isLike = true) {
