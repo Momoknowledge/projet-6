@@ -1,3 +1,4 @@
+const {DB_USER, DB_PASSWORD, DB_URL} = require("./config");
 
 const express = require('express'); //importe express
 const mongoose = require('mongoose');// facilite les interactions entre l'application Express et la base de données MongoDB
@@ -7,7 +8,7 @@ const app = express(); //Il prend en charge les détails essentiels du backend t
 const bodyParser = require("body-parser"); //analyse les corps de toutes les requêtes entrantes disponible sous la propriété req.body
 
 // connexion to mongoDB
-mongoose.connect('mongodb+srv://momoUser32:UsVBHOg8PWJbczAI@cluster0.l5tyt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_URL}`)
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(err => {
         console.error('Connexion à MongoDB échouée !');
