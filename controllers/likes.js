@@ -15,11 +15,10 @@ function getOBJLike(isLike, add = true) {
     const n = add ? 1 : -1;
     return isLike ? {likes: n} : {dislikes: n};
 }
+async function addLike(sauceID, userID, isLike = true) {
+    const [hasLiked, hasDisliked] = await findLikes(sauceID, userID);
 
-async function pushLike(sauceID, userID, isLike = true) {
-    const [hasLike, hasDislike] = await findLikes(sauceID, userID);
-
-    if (hasLike || hasDislike) throw new Error("ALREADY LIKED");
+    if (hasLiked || hasDisliked) throw new Error("ALREADY LIKED");
 
     return Sauce.updateOne({ _id: sauceID }, {
         $push: getOBJUserLike(userID, isLike),
@@ -28,19 +27,19 @@ async function pushLike(sauceID, userID, isLike = true) {
 }
 
 async function rmLike(sauceID, userID) {
-    const [hasLike, hasDislike] = await findLikes(sauceID, userID);
+    const [hasLiked, hasDisliked] = await findLikes(sauceID, userID);
 
-    if (!hasLike && !hasDislike) throw new Error("NO LIKE");
+    if (!hasLiked && !hasDisliked) throw new Error("NO LIKE");
 
     return Sauce.updateOne({ _id: sauceID }, {
-        $pull: getOBJUserLike(userID, hasLike),
-        $inc: getOBJLike(hasLike, false),
+        $pull: getOBJUserLike(userID, hasLiked),
+        $inc: getOBJLike(hasLiked, false),
     });
 }
 
-exports.addLikeOrDislike = (req, res) => {
+exports.handleLikes = (req, res) => {
     const action = req.body.like
-        ? pushLike(req.params.id, req.body.userId, req.body.like > 0)
+        ? addLike(req.params.id, req.body.userId, req.body.like > 0)
         : rmLike(req.params.id, req.body.userId);
 
     action.then(() => res.status(200).json({ message: "Objet modifié !" }))

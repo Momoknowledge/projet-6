@@ -15,7 +15,7 @@ const normalizePort = (val, defaultValue) => {
  *renvoie sur quel port il doit tourner
  * @type {number|*}
  */
-const port = normalizePort(process.env.PORT, 3000);
+const port = normalizePort(process.env.PORT, 3000); //si l'environnement nous envoie un port à utiliser sinon par défaut, on utilise le port 3000
 
 /**
  * recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur
